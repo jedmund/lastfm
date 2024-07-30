@@ -294,3 +294,63 @@ export module UserTopTracks {
     images: LastfmImage[]
   }
 }
+
+// user.getWeeklyAlbumChart
+export module UserWeeklyAlbumChart {
+  export interface Params {
+    /**
+     * The date at which the chart should start from.
+     * This should be in unix timestamp format.
+     */
+    from?: number
+    /**
+     * The date at which the chart should end on.
+     * This should be in unix timestamp format.
+     */
+    to?: number
+  }
+
+  export interface OriginalResponse {
+    weeklyalbumchart: {
+      album: {
+        artist: {
+          mbid?: string
+          '#text': string
+        }
+        name: string
+        mbid?: string
+        playcount: string
+        url: string
+        '@attr': {
+          rank: string
+        }
+      }[]
+      '@attr': {
+        user: string
+        from: string
+        to: string
+      }
+    }
+  }
+
+  export interface Album {
+    artist: {
+      name: string
+      mbid?: string
+    }
+    name: string
+    mbid?: string
+    playCount: number
+    url: string
+    rank: number
+  }
+
+  export interface Response {
+    albums: Album[]
+    attr: {
+      user: string
+      from: Date
+      to: Date
+    }
+  }
+}
