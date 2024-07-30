@@ -7,7 +7,8 @@ import {
   LastfmUserTopAlbum,
   LastfmUserTopAlbumsParams,
   UserTopArtists,
-  UserTopTracks
+  UserTopTracks,
+  UserWeeklyAlbumChart
 } from '../types/packages/user.js'
 import type {
   GetFormattedResponse,
@@ -187,6 +188,42 @@ export class User {
     return {
       tracks,
       pagination: parseLastfmPagination(response.toptracks['@attr'])
+    }
+  }
+
+  async getWeeklyAlbumChart(
+    user: string,
+    params?: UserWeeklyAlbumChart.Params
+  ): Promise<
+    GetFormattedResponse<LastfmResponses['user.getWeeklyAlbumChart']>
+  > {
+    const response = await this.client.request('user.getWeeklyAlbumChart', {
+      ...params,
+      user
+    })
+
+    const albums: UserWeeklyAlbumChart.Album[] =
+      response.weeklyalbumchart.album.map((a) => ({
+        artist: {
+          name: a.artist['#text'],
+          mbid: a.artist.mbid
+        },
+        name: a.name,
+        mbid: a.mbid,
+        playCount: parseInt(a.playcount),
+        url: a.url,
+        rank: parseInt(a['@attr'].rank)
+      }))
+
+    return {
+      albums,
+      attr: {
+        user: response.weeklyalbumchart['@attr'].user,
+        from: new Date(
+          parseInt(response.weeklyalbumchart['@attr'].from) * 1000
+        ),
+        to: new Date(parseInt(response.weeklyalbumchart['@attr'].to) * 1000)
+      }
     }
   }
 }

@@ -5,7 +5,8 @@ import type {
   LastfmUserInfo,
   LastfmUserTopAlbum,
   UserTopArtists,
-  UserTopTracks
+  UserTopTracks,
+  UserWeeklyAlbumChart
 } from './packages/user'
 import {
   LastfmOriginalTrackInfoResponse,
@@ -58,6 +59,10 @@ export type LastfmResponses = {
   'user.getTopAlbums': LastfmResponse<
     LastfmOriginalUserTopAlbumsResponse,
     PaginatedResponse<{ albums: LastfmUserTopAlbum[] }>
+  >
+  'user.getWeeklyAlbumChart': LastfmResponse<
+    UserWeeklyAlbumChart.OriginalResponse,
+    UserWeeklyAlbumChart.Response
   >
   'track.getInfo': LastfmResponse<
     LastfmOriginalTrackInfoResponse,
